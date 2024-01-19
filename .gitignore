@@ -3,4 +3,7 @@
 cmake-build-debug
 build
 build-*
-
+draco/build
+.eggs
+.venv
+_skbuild

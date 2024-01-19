@@ -27,12 +27,6 @@
 #include <cstdint>
 #include <cstddef>
 
-#if defined(_MSC_VER)
-#define API(returnType) extern "C" __declspec(dllexport) returnType __cdecl
-#else
-#define API(returnType) extern "C" returnType
-#endif
-
 enum ComponentType : size_t
 {
     Byte = 5120,
@@ -43,8 +37,8 @@ enum ComponentType : size_t
     Float = 5126,
 };
 
-size_t getNumberOfComponents(char *dataType);
+size_t getNumberOfComponents(char* dataType);
 
 size_t getComponentByteLength(size_t componentType);
 
-size_t getAttributeStride(size_t componentType, char *dataType);
+size_t getAttributeStride(size_t componentType, char* dataType);

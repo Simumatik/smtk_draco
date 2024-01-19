@@ -28,38 +28,26 @@
 
 struct Decoder;
 
-API(Decoder *)
-decoderCreate();
+Decoder* decoderCreate();
 
-API(void)
-decoderRelease(Decoder *decoder);
+void decoderRelease(Decoder* decoder);
 
-API(bool)
-decoderDecode(Decoder *decoder, void *data, size_t byteLength);
+bool decoderDecode(Decoder* decoder, void* data, size_t byteLength);
 
-API(uint32_t)
-decoderGetVertexCount(Decoder *decoder);
+uint32_t decoderGetVertexCount(Decoder* decoder);
 
-API(uint32_t)
-decoderGetIndexCount(Decoder *decoder);
+uint32_t decoderGetIndexCount(Decoder* decoder);
 
-API(bool)
-decoderAttributeIsNormalized(Decoder *decoder, uint32_t id);
+bool decoderAttributeIsNormalized(Decoder* decoder, uint32_t id);
 
-API(bool)
-decoderReadAttribute(Decoder *decoder, uint32_t id, size_t componentType, char *dataType);
+bool decoderReadAttribute(Decoder* decoder, uint32_t id, size_t componentType, char* dataType);
 
-API(size_t)
-decoderGetAttributeByteLength(Decoder *decoder, size_t id);
+size_t decoderGetAttributeByteLength(Decoder* decoder, size_t id);
 
-API(void)
-decoderCopyAttribute(Decoder *decoder, size_t id, void *output);
+void decoderCopyAttribute(Decoder* decoder, size_t id, void* output);
 
-API(bool)
-decoderReadIndices(Decoder *decoder, size_t indexComponentType);
+bool decoderReadIndices(Decoder* decoder, size_t indexComponentType);
 
-API(size_t)
-decoderGetIndicesByteLength(Decoder *decoder);
+size_t decoderGetIndicesByteLength(Decoder* decoder);
 
-API(void)
-decoderCopyIndices(Decoder *decoder, void *output);
+void decoderCopyIndices(Decoder* decoder, void* output);

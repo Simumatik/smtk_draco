@@ -1,0 +1,9 @@
+# Borrowed from github seung-lab/DracoPy@9caf1aaf219700b93994122e1f267ba7c71233ce
+[build-system]
+requires = [
+	"setuptools",
+	"scikit-build >= 0.9.0",
+	"wheel",
+	"cython",
+	"cmake"
+]

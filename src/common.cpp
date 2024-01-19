@@ -16,7 +16,7 @@
 
 #include <cstring>
 
-size_t getNumberOfComponents(char *dataType)
+size_t getNumberOfComponents(char* dataType)
 {
     if (!strcmp(dataType, "SCALAR"))
     {
@@ -71,7 +71,7 @@ size_t getComponentByteLength(size_t componentType)
     }
 }
 
-size_t getAttributeStride(size_t componentType, char *dataType)
+size_t getAttributeStride(size_t componentType, char* dataType)
 {
-    return getComponentByteLength(componentType) * getNumberOfComponents(dataType);
+    return getComponentByteLength(componentType)*  getNumberOfComponents(dataType);
 }

@@ -47,24 +47,24 @@ struct Encoder
     } quantization;
 };
 
-Encoder *encoderCreate(uint32_t vertexCount)
+Encoder* encoderCreate(uint32_t vertexCount)
 {
-    Encoder *encoder = new Encoder;
+    Encoder* encoder = new Encoder;
     encoder->mesh.set_num_points(vertexCount);
     return encoder;
 }
 
-void encoderRelease(Encoder *encoder)
+void encoderRelease(Encoder* encoder)
 {
     delete encoder;
 }
 
-void encoderSetCompressionLevel(Encoder *encoder, uint32_t compressionLevel)
+void encoderSetCompressionLevel(Encoder* encoder, uint32_t compressionLevel)
 {
     encoder->compressionLevel = compressionLevel;
 }
 
-void encoderSetQuantizationBits(Encoder *encoder, uint32_t position, uint32_t normal, uint32_t uv, uint32_t color, uint32_t generic)
+void encoderSetQuantizationBits(Encoder* encoder, uint32_t position, uint32_t normal, uint32_t uv, uint32_t color, uint32_t generic)
 {
     encoder->quantization.position = position;
     encoder->quantization.normal = normal;
@@ -73,7 +73,7 @@ void encoderSetQuantizationBits(Encoder *encoder, uint32_t position, uint32_t no
     encoder->quantization.generic = generic;
 }
 
-bool encoderEncode(Encoder *encoder, uint8_t preserveTriangleOrder)
+bool encoderEncode(Encoder* encoder, uint8_t preserveTriangleOrder)
 {
     printf(LOG_PREFIX "Preserve triangle order: %s\n", preserveTriangleOrder ? "yes" : "no");
 
@@ -111,28 +111,28 @@ bool encoderEncode(Encoder *encoder, uint8_t preserveTriangleOrder)
     }
 }
 
-uint32_t encoderGetEncodedVertexCount(Encoder *encoder)
+uint32_t encoderGetEncodedVertexCount(Encoder* encoder)
 {
     return encoder->encodedVertices;
 }
 
-uint32_t encoderGetEncodedIndexCount(Encoder *encoder)
+uint32_t encoderGetEncodedIndexCount(Encoder* encoder)
 {
     return encoder->encodedIndices;
 }
 
-uint64_t encoderGetByteLength(Encoder *encoder)
+uint64_t encoderGetByteLength(Encoder* encoder)
 {
     return encoder->encoderBuffer.size();
 }
 
-void encoderCopy(Encoder *encoder, uint8_t *data)
+void encoderCopy(Encoder* encoder, uint8_t* data)
 {
     memcpy(data, encoder->encoderBuffer.data(), encoder->encoderBuffer.size());
 }
 
 template <class T>
-void encodeIndices(Encoder *encoder, uint32_t indexCount, T *indices)
+void encodeIndices(Encoder* encoder, uint32_t indexCount, T* indices)
 {
     int face_count = indexCount / 3;
     encoder->mesh.SetNumFaces(static_cast<size_t>(face_count));
@@ -148,31 +148,31 @@ void encodeIndices(Encoder *encoder, uint32_t indexCount, T *indices)
     }
 }
 
-void encoderSetIndices(Encoder *encoder, size_t indexComponentType, uint32_t indexCount, void *indices)
+void encoderSetIndices(Encoder* encoder, size_t indexComponentType, uint32_t indexCount, void* indices)
 {
     switch (indexComponentType)
     {
     case ComponentType::Byte:
-        encodeIndices(encoder, indexCount, reinterpret_cast<int8_t *>(indices));
+        encodeIndices(encoder, indexCount, reinterpret_cast<int8_t*>(indices));
         break;
     case ComponentType::UnsignedByte:
-        encodeIndices(encoder, indexCount, reinterpret_cast<uint8_t *>(indices));
+        encodeIndices(encoder, indexCount, reinterpret_cast<uint8_t*>(indices));
         break;
     case ComponentType::Short:
-        encodeIndices(encoder, indexCount, reinterpret_cast<int16_t *>(indices));
+        encodeIndices(encoder, indexCount, reinterpret_cast<int16_t*>(indices));
         break;
     case ComponentType::UnsignedShort:
-        encodeIndices(encoder, indexCount, reinterpret_cast<uint16_t *>(indices));
+        encodeIndices(encoder, indexCount, reinterpret_cast<uint16_t*>(indices));
         break;
     case ComponentType::UnsignedInt:
-        encodeIndices(encoder, indexCount, reinterpret_cast<uint32_t *>(indices));
+        encodeIndices(encoder, indexCount, reinterpret_cast<uint32_t*>(indices));
         break;
     default:
         printf(LOG_PREFIX "Index component type %zu not supported\n", indexComponentType);
     }
 }
 
-draco::GeometryAttribute::Type getAttributeSemantics(char *attribute)
+draco::GeometryAttribute::Type getAttributeSemantics(char* attribute)
 {
     if (!strcmp(attribute, "POSITION"))
     {
@@ -221,8 +221,7 @@ draco::DataType getDataType(size_t componentType)
     }
 }
 
-API(uint32_t)
-encoderSetAttribute(Encoder *encoder, char *attributeName, size_t componentType, char *dataType, void *data)
+uint32_t encoderSetAttribute(Encoder* encoder, char* attributeName, size_t componentType, char* dataType, void* data)
 {
     auto buffer = std::make_unique<draco::DataBuffer>();
     uint32_t count = encoder->mesh.num_points();
@@ -235,7 +234,7 @@ encoderSetAttribute(Encoder *encoder, char *attributeName, size_t componentType,
     attribute.Init(semantics, &*buffer, componentCount, getDataType(componentType), false, stride, 0);
 
     auto id = static_cast<uint32_t>(encoder->mesh.AddAttribute(attribute, true, count));
-    auto dataBytes = reinterpret_cast<uint8_t *>(data);
+    auto dataBytes = reinterpret_cast<uint8_t*>(data);
 
     for (uint32_t i = 0; i < count; i++)
     {

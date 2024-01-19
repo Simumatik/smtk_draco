@@ -1,8 +1,9 @@
-# Draco Mesh Compression for Blender
+# A fork of https://github.com/ux3d/blender_extern_draco@35e1595c0ab1fa627aeaeff0247890763f993865 (used as a starting point) for a Python wrapper package
+# Also inspired by https://github.com/seung-lab/DracoPy@9caf1aaf219700b93994122e1f267ba7c71233ce
 
-[Draco](https://github.com/google/draco) encoding and decoding for [glTF-Blender-IO](https://github.com/KhronosGroup/glTF-Blender-IO).
+# Draco Mesh Compression for Python
 
-The Blender repository has copies of the files in `src` and the *required* Draco source files located in `<blender-root>/extern/draco`.
+[Draco](https://github.com/google/draco) encoding and decoding for Python 3.x
 
 ## Changes
 
