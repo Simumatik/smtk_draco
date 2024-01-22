@@ -27,7 +27,12 @@
 #include "draco/core/decoder_buffer.h"
 #include "draco/compression/decode.h"
 
+#ifdef WITH_LOGGING
 #define LOG_PREFIX "DracoDecoder | "
+#define logf(...) printf(LOG_PREFIX __VA_ARGS__)
+#else
+#define logf(...)
+#endif
 
 struct Decoder
 {
@@ -58,7 +63,7 @@ bool decoderDecode(Decoder* decoder, void* data, size_t byteLength)
     auto decoderStatus = dracoDecoder.DecodeMeshFromBuffer(&dracoDecoderBuffer);
     if (!decoderStatus.ok())
     {
-        printf(LOG_PREFIX "Error during Draco decoding: %s\n", decoderStatus.status().error_msg());
+        logf("Error during Draco decoding: %s\n", decoderStatus.status().error_msg());
         return false;
     }
 
@@ -66,7 +71,7 @@ bool decoderDecode(Decoder* decoder, void* data, size_t byteLength)
     decoder->vertexCount = decoder->mesh->num_points();
     decoder->indexCount = decoder->mesh->num_faces() * 3;
 
-    printf(LOG_PREFIX "Decoded %" PRIu32 " vertices, %" PRIu32 " indices\n", decoder->vertexCount, decoder->indexCount);
+    logf("Decoded %" PRIu32 " vertices, %" PRIu32 " indices\n", decoder->vertexCount, decoder->indexCount);
 
     return true;
 }
@@ -93,7 +98,7 @@ bool decoderReadAttribute(Decoder* decoder, uint32_t id, size_t componentType, c
 
     if (attribute == nullptr)
     {
-        printf(LOG_PREFIX "Attribute with id=%" PRIu32 " does not exist in Draco data\n", id);
+        logf("Attribute with id=%" PRIu32 " does not exist in Draco data\n", id);
         return false;
     }
 
@@ -135,7 +140,7 @@ bool decoderReadAttribute(Decoder* decoder, uint32_t id, size_t componentType, c
 
         if (!converted)
         {
-            printf(LOG_PREFIX "Failed to convert Draco attribute type to glTF accessor type for attribute with id=%" PRIu32 "\n", id);
+            logf("Failed to convert Draco attribute type to glTF accessor type for attribute with id=%" PRIu32 "\n", id);
             return false;
         }
     }
@@ -204,7 +209,7 @@ bool decoderReadIndices(Decoder* decoder, size_t indexComponentType)
         decodeIndices<uint32_t>(decoder);
         break;
     default:
-        printf(LOG_PREFIX "Index component type %zu not supported\n", indexComponentType);
+        logf("Index component type %zu not supported\n", indexComponentType);
         return false;
     }
 

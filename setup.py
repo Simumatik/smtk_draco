@@ -11,7 +11,6 @@ from skbuild.constants import CMAKE_INSTALL_DIR, skbuild_plat_name
 from skbuild.exceptions import SKBuildError
 from skbuild.cmaker import get_cmake_version
 
-import numpy as np
 import multiprocessing as mp
 
 if not "CMAKE_BUILD_PARALLEL_LEVEL" in os.environ:
@@ -22,8 +21,8 @@ def read(fname):
     return f.read()
 
 # Add CMake as a build requirement if cmake is not installed or is too low a version
-setup_requires = ['cython']
-setup_requires.append('cmake<3.15')
+#setup_requires = ['cython']
+#setup_requires.append('cmake<3.15')
 
 # If you want to re-build the cython cpp file (DracoPy.cpp), run:
 # cython --cplus -3 -I./_skbuild/linux-x86_64-3.6/cmake-install/include/draco/ ./src/DracoPy.pyx
@@ -63,21 +62,27 @@ else: # linux
 
 cmake_args.append("-DCMAKE_POSITION_INDEPENDENT_CODE=ON") # make -fPIC code
 
+# TODO: make optional
+cmake_args.append("-DDRACO_TESTS=ON") # enable draco tests
+
+
 if is_windows:
     extra_link_args = ['/LIBPATH:{0}'.format(lib_dir) for lib_dir in lib_dirs] + library_link_args
     extra_compile_args = [
       '/std:c++17', '/O2',
+      "/DWITH_LOGGING" # TODO: make optional
     ]
 else:
     extra_link_args = ['-L{0}'.format(lib_dir) for lib_dir in lib_dirs] + library_link_args
     extra_compile_args = [
-      '-std=c++11','-O3'
+      '-std=c++17','-O3',
+      "-DWITH_LOGGING" # TODO: make optional
     ]
 
 setup(
     name='smtk_draco',
     version='1.0.0',
-    description = 'Python wrapper for Google\'s Draco Mesh Compression Library',
+    description = 'Simple Python wrapper for Blenders minimal DRACO decoder/encoder using Google\'s Draco Mesh Compression Library',
     author = 'Manuel Castro, William Silversmith :: Contributors :: Fatih Erol, Faru Nuri Sonmez, Zeyu Zhao, Denis Riviere',
     author_email = 'macastro@princeton.edu, ws9@princeton.edu',
     url = 'https://github.com/Simumatik/smtk_draco',
@@ -86,15 +91,15 @@ setup(
     license = "License :: OSI Approved :: Apache Software License",
     cmake_source_dir='./draco',
     cmake_args=cmake_args,
-    setup_requires=setup_requires,
+    #setup_requires=setup_requires,
     ext_modules=[
         setuptools.Extension(
             'smtk_draco',
-            sources=[ os.path.join(src_dir, 'smtk_draco.pyx') ],
-            depends=[ os.path.join(src_dir, 'smtk_draco.h') ],
+            sources=[ 
+                os.path.join(src_dir, 'smtk_draco.pyx'),
+            ],
             language='c++',
             include_dirs = [
-                np.get_include(),
                 os.path.join(CMAKE_INSTALL_DIR(), 'include/'),
             ],
             extra_compile_args=extra_compile_args,

@@ -26,7 +26,12 @@
 #include "draco/core/encoder_buffer.h"
 #include "draco/compression/encode.h"
 
+#ifdef WITH_LOGGING
 #define LOG_PREFIX "DracoEncoder | "
+#define logf(...) printf(LOG_PREFIX __VA_ARGS__)
+#else
+#define logf(...)
+#endif
 
 struct Encoder
 {
@@ -75,7 +80,7 @@ void encoderSetQuantizationBits(Encoder* encoder, uint32_t position, uint32_t no
 
 bool encoderEncode(Encoder* encoder, uint8_t preserveTriangleOrder)
 {
-    printf(LOG_PREFIX "Preserve triangle order: %s\n", preserveTriangleOrder ? "yes" : "no");
+    logf("Preserve triangle order: %s\n", preserveTriangleOrder ? "yes" : "no");
 
     draco::Encoder dracoEncoder;
 
@@ -101,12 +106,12 @@ bool encoderEncode(Encoder* encoder, uint8_t preserveTriangleOrder)
         encoder->encodedIndices = static_cast<uint32_t>(dracoEncoder.num_encoded_faces() * 3);
         size_t encodedSize = encoder->encoderBuffer.size();
         float compressionRatio = static_cast<float>(encoder->rawSize) / static_cast<float>(encodedSize);
-        printf(LOG_PREFIX "Encoded %" PRIu32 " vertices, %" PRIu32 " indices, raw size: %zu, encoded size: %zu, compression ratio: %.2f\n", encoder->encodedVertices, encoder->encodedIndices, encoder->rawSize, encodedSize, compressionRatio);
+        logf("Encoded %" PRIu32 " vertices, %" PRIu32 " indices, raw size: %zu, encoded size: %zu, compression ratio: %.2f\n", encoder->encodedVertices, encoder->encodedIndices, encoder->rawSize, encodedSize, compressionRatio);
         return true;
     }
     else
     {
-        printf(LOG_PREFIX "Error during Draco encoding: %s\n", encoderStatus.error_msg());
+        logf("Error during Draco encoding: %s\n", encoderStatus.error_msg());
         return false;
     }
 }
@@ -168,7 +173,7 @@ void encoderSetIndices(Encoder* encoder, size_t indexComponentType, uint32_t ind
         encodeIndices(encoder, indexCount, reinterpret_cast<uint32_t*>(indices));
         break;
     default:
-        printf(LOG_PREFIX "Index component type %zu not supported\n", indexComponentType);
+        logf("Index component type %zu not supported\n", indexComponentType);
     }
 }
 

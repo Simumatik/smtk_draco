@@ -7,3 +7,9 @@ draco/build
 .eggs
 .venv
 _skbuild
+
+src/smtk_draco.cpp # ignore this until the project is properly structured
+.venv*
+**/__pycache__
+*.pyd
+smtk_draco.* # .egg-info etc
