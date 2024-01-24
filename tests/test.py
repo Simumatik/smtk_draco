@@ -83,7 +83,7 @@ assert decoder is not None
 assert type(decoder).__name__ == 'PyCapsule'
 
 import pathlib
-testfile = pathlib.Path(__file__).parent.joinpath("testdata/test.drc")
+testfile = pathlib.Path(__file__).parent.joinpath("resources/test.drc")
 with open(testfile, "rb") as f:
     data = f.read()
     if not draco.decoderDecode(decoder, data, len(data)):
@@ -161,7 +161,7 @@ draco.decoderRelease(decoder)
 new_decoder = draco.Decoder()
 
 import pathlib
-testfile = pathlib.Path(__file__).parent.joinpath("testdata/test.drc")
+testfile = pathlib.Path(__file__).parent.joinpath("resources/test.drc")
 with open(testfile, "rb") as f:
     data = f.read()
     if not new_decoder.decode(data):
