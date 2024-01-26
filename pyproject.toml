@@ -1,5 +1,5 @@
 [build-system]
-requires = [
+  requires = [
 	"scikit-build-core",
 	"cython >= 3.0.8",
 ]
@@ -43,3 +43,9 @@ sdist.exclude = [
     "draco/third_party", 
     "draco/unity", 
 ]
+
+[[tool.scikit-build.generate]]
+path = "_version.py"
+template = '''
+version = "${version}"
+'''

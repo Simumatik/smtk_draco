@@ -1,5 +1,5 @@
 #cython: language_level=3
-# distutils: language = c++
+#distutils: language = c++
 cimport common
 cimport decoder
 cimport encoder
@@ -9,7 +9,9 @@ cimport cpython.object
 
 from libc.stdint cimport uint8_t
 
-__version__ = "1.0.0"
+from _version import version
+
+__version__ = version
 
 # print("Byte: ", common.ComponentType.Byte)
 
