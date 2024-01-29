@@ -1,4 +1,9 @@
 cmake_minimum_required(VERSION 3.18...3.28)
+
+if ( NOT SKBUILD_PROJECT_VERSION )
+  message(WARNING "SKBUILD_PROJECT_VERSION is not set. Running CMake manually may not work as intended.")
+endif()
+
 project(
   ${SKBUILD_PROJECT_NAME} 
   VERSION ${SKBUILD_PROJECT_VERSION}
@@ -8,11 +13,13 @@ project(
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_STANDARD 17)
 
+
 find_package(
   Python3
   COMPONENTS Interpreter Development.Module
   REQUIRED
 )
+
 # TODO: unless scikit env vars are set, check if scikit-build-core is installed by importing it
 # See: https://stackoverflow.com/questions/62553007/cmake-check-python3-and-python-packages-presence
 
