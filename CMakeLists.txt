@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.18...3.28)
 
-if ( NOT SKBUILD_PROJECT_VERSION )
+if (NOT SKBUILD_PROJECT_VERSION)
   message(WARNING "SKBUILD_PROJECT_VERSION is not set. Running CMake manually may not work as intended.")
 endif()
 
@@ -13,6 +13,10 @@ project(
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_STANDARD 17)
 
+set(PACKAGE_SOURCE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/src")
+set(PACKAGE_BINARY_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
+set(DRACO_SOURCE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/draco/src")
+set(DRACO_BINARY_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/draco") # Created by draco's CMake configuration
 
 find_package(
   Python3
@@ -37,25 +41,25 @@ add_subdirectory(draco EXCLUDE_FROM_ALL)
 add_custom_command(
   OUTPUT smtk_draco.cpp
   COMMAND "${CYTHON}" 
-    --cplus "${CMAKE_CURRENT_SOURCE_DIR}/src/smtk_draco.pyx" 
-    --output-file "${CMAKE_CURRENT_BINARY_DIR}/smtk_draco.cpp"
+    --cplus ${PACKAGE_SOURCE_DIRECTORY}/smtk_draco.pyx
+    --output-file ${PACKAGE_BINARY_DIRECTORY}/smtk_draco.cpp
   VERBATIM
 )
 
 # Prepare the module
-Python3_add_library (smtk_draco 
+Python3_add_library (smtk_draco
   MODULE
   WITH_SOABI
-  "${CMAKE_CURRENT_BINARY_DIR}/smtk_draco.cpp" 
+  "${PACKAGE_BINARY_DIRECTORY}/smtk_draco.cpp"
 )
 
 # Add module dependencies
 target_include_directories(smtk_draco
   PRIVATE
-  ${CMAKE_CURRENT_SOURCE_DIR}/src 
-  ${CMAKE_CURRENT_SOURCE_DIR}/draco/src 
-  ${CMAKE_BINARY_DIR}/draco
-  ${CMAKE_BINARY_DIR}
+  ${PACKAGE_BINARY_DIRECTORY}
+  ${PACKAGE_SOURCE_DIRECTORY}
+  ${DRACO_SOURCE_DIRECTORY}
+  ${DRACO_BINARY_DIRECTORY}
 )
 
 # DRACOs configuration for non-MSVC builds use another name 
