@@ -1,5 +1,5 @@
 [build-system]
-  requires = [
+requires = [
 	"scikit-build-core",
 	"cython >= 3.0.8",
 ]
@@ -8,6 +8,7 @@ build-backend = "scikit_build_core.build"
 [project]
 name = "smtk_draco"
 version = "0.0.0"
+description = "Python wrapper of Blenders Draco bridging library"
 requires-python = ">= 3.7"
 authors = [
     {name = "barasimumatik"},
@@ -15,10 +16,9 @@ authors = [
 maintainers = [
 	{name="Simumatik"}
 ]
-description = "Simple Python wrapper for Blenders minimal DRACO decoder/encoder"
 readme = "README.md"
-keywords = ["draco", "mesh compression"]
-license = {file = "LICENSE"}
+keywords = ["draco", "mesh compression", "gltf", "glb"]
+license = {text="Apache License Version 2.0 (see LICENSE)"}
 classifiers = [
 	"Intended Audience :: Developers",
     "Development Status :: 3 - Alpha",
