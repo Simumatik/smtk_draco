@@ -47,5 +47,4 @@ For now, refer to the basic test script tests/test.py.
 
 * Add a Github Actions workflow for [cibuildwheel](https://github.com/pypa/cibuildwheel) to create wheels for more platforms and Python versions
 * Add proper unit tests
-* Add an enum for the glTF mapping functions
-* Refactor smtk_draco.pyx (e.g. move the Decoder and Encoder to separate sub-packages etc)
+* Add an enum for the glTF helper functions (see common.pxi)
