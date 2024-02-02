@@ -22,7 +22,7 @@ jobs:
       - name: Checkout commit
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
-          submodules: 'recursively'
+          submodules: 'recursive'
         
       - name: Build wheels
         uses: pypa/cibuildwheel@ce3fb7832089eb3e723a0a99cab7f3eaccf074fd # v2.16.5
