@@ -38,13 +38,34 @@ set(DRACO_FAST ON CACHE BOOL "") # Optimize for speed if possible
 set(DRACO_GLTF_BITSTREAM ON CACHE BOOL "") # We don't need the whole DRACO library (not yet anyway)
 add_subdirectory(draco EXCLUDE_FROM_ALL)
 
+# Package sources
+set(EXTENSION_DEPENDENCIES
+  # Common
+  ${PACKAGE_SOURCE_DIRECTORY}/common.cpp
+  ${PACKAGE_SOURCE_DIRECTORY}/common.h
+  ${PACKAGE_SOURCE_DIRECTORY}/common.pxd
+  ${PACKAGE_SOURCE_DIRECTORY}/common.pxi
+  # Decoder
+  ${PACKAGE_SOURCE_DIRECTORY}/decoder.cpp
+  ${PACKAGE_SOURCE_DIRECTORY}/decoder.h
+  ${PACKAGE_SOURCE_DIRECTORY}/decoder.pxd
+  ${PACKAGE_SOURCE_DIRECTORY}/decoder.pxi
+  # Encoder
+  ${PACKAGE_SOURCE_DIRECTORY}/encoder.cpp
+  ${PACKAGE_SOURCE_DIRECTORY}/encoder.h
+  ${PACKAGE_SOURCE_DIRECTORY}/encoder.pxd
+  ${PACKAGE_SOURCE_DIRECTORY}/encoder.pxi
+  # Extension definition
+  ${PACKAGE_SOURCE_DIRECTORY}/smtk_draco.pyx
+)
+
 # Generate the extension C++ code from the Cython source
 add_custom_command(
   OUTPUT  ${PACKAGE_BINARY_DIRECTORY}/smtk_draco.cpp
   COMMAND ${CYTHON} 
     --cplus ${PACKAGE_SOURCE_DIRECTORY}/smtk_draco.pyx 
     --output-file ${PACKAGE_BINARY_DIRECTORY}/smtk_draco.cpp
-  DEPENDS ${PACKAGE_SOURCE_DIRECTORY}/*.* # if any file in src/ changes, regenerate the extension source file
+  DEPENDS ${EXTENSION_DEPENDENCIES} # if any extension dependency changes, regenerate the extension source file
   COMMENT "Generating smtk_draco.cpp with Cython"
   VERBATIM
 )
