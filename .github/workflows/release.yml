@@ -111,8 +111,39 @@ jobs:
           path: dist
           merge-multiple: true
   
-      - name: Publish to Test PyPi
+      - name: Publish to PyPi
         uses: pypa/gh-action-pypi-publish@2f6f737ca5f74c637829c0f5c3acd0e29ea5e8bf # v1.8.11
         with:
-          repository-url: https://pypi.org/legacy/
           print-hash: true
+
+  github_release:
+    name: Sign the Python 🐍 distribution 📦 with Sigstore and upload them to GitHub Release
+    needs: [ publish_to_pypi ]
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write  
+      id-token: write
+
+    steps:
+    - name: Download all the dists
+      uses: actions/download-artifact@6b208ae046db98c579e8a3aa621ab581ff575935 # v4.1.1
+      with:
+        pattern: cibw-*
+        path: dist
+        merge-multiple: true
+
+    - name: Sign the dists with Sigstore
+      uses: sigstore/gh-action-sigstore-python@61f6a500bbfdd9a2a339cf033e5421951fbc1cd2 # v2.1.1
+      with:
+        inputs: >-
+          dist/*.tar.gz 
+          dist/*.whl
+
+    # NOTE: this step relies on a release having been published
+    - name: Upload artifact signatures to GitHub Release
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      # Upload to GitHub Release using the `gh` CLI. `dist/` contains the built packages, and the sigstore-produced signatures and certificates.
+      run:
+        gh release upload '${{ github.ref_name }}' dist/** --repo '${{ github.repository }}'
