@@ -27,7 +27,8 @@ find_package(
 # TODO: unless scikit env vars are set, check if scikit-build-core is installed by importing it
 # See: https://stackoverflow.com/questions/62553007/cmake-check-python3-and-python-packages-presence
 
-find_program(CYTHON "cython")
+find_program(CYTHON "cython") # Don't cache since it breaks rebuilds if built using build isolation
+
 if(NOT CYTHON OR NOT EXISTS ${CYTHON})
   message(FATAL_ERROR "Cython is required. See build system requirements in pyproject.toml.")
 endif()
@@ -39,10 +40,12 @@ add_subdirectory(draco EXCLUDE_FROM_ALL)
 
 # Generate the extension C++ code from the Cython source
 add_custom_command(
-  OUTPUT smtk_draco.cpp
-  COMMAND "${CYTHON}" 
-    --cplus ${PACKAGE_SOURCE_DIRECTORY}/smtk_draco.pyx
+  OUTPUT  ${PACKAGE_BINARY_DIRECTORY}/smtk_draco.cpp
+  COMMAND ${CYTHON} 
+    --cplus ${PACKAGE_SOURCE_DIRECTORY}/smtk_draco.pyx 
     --output-file ${PACKAGE_BINARY_DIRECTORY}/smtk_draco.cpp
+  DEPENDS ${PACKAGE_SOURCE_DIRECTORY}/*.* # if any file in src/ changes, regenerate the extension source file
+  COMMENT "Generating smtk_draco.cpp with Cython"
   VERBATIM
 )
 
@@ -50,13 +53,13 @@ add_custom_command(
 Python3_add_library (smtk_draco
   MODULE
   WITH_SOABI
-  "${PACKAGE_BINARY_DIRECTORY}/smtk_draco.cpp"
+   ${PACKAGE_BINARY_DIRECTORY}/smtk_draco.cpp
 )
 
 # Add module dependencies
 target_include_directories(smtk_draco
   PRIVATE
-  ${PACKAGE_BINARY_DIRECTORY}
+  ${PACKAGE_BINARY_DIRECTORY} # Basically just for the draco/draco_features.h include to work (some draco source files depend on it)
   ${PACKAGE_SOURCE_DIRECTORY}
   ${DRACO_SOURCE_DIRECTORY}
   ${DRACO_BINARY_DIRECTORY}

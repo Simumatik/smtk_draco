@@ -1,6 +1,7 @@
 [build-system]
 requires = [
 	"scikit-build-core",
+    "scikit-build-core[pyproject]",
 	"cython >= 3.0.8",
 ]
 build-backend = "scikit_build_core.build"

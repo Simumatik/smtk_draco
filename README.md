@@ -12,10 +12,7 @@ The main reason this repository was created was to implement the [KHR_draco_mesh
 
 Since we only require the parts of the Draco library used by the glTF extension, the Blender bridging library served as an excellent starting point that serves our need. 
 
-
-Be aware that we leave no guarantees regarding the quality or reliability of the code in this repository. Use it at your own risk! 
-
-Beside trying to fix any eventual issues with the current implementation, we may or may not add new functionality or improvements, either to the existing bridge code or by wrapping other parts of the Draco library to suit our needs.
+Beside trying to fix any eventual issues with the current implementation, we may or may not add new functionality or improvements, either to the existing bridge code or by wrapping other parts of the Draco library to suit our needs. Use the Python package and the code at your own risk!
 
 ## Changes
 
@@ -23,6 +20,14 @@ Beside trying to fix any eventual issues with the current implementation, we may
 * Cython sources for the bridging library has been added (.pyd, .pyx)
 * Added a Python-based build system that uses CMake (scikit-build-core, see pyproject.toml) and setup the project for packaging and distribution to PyPi
 * Added a Decoder and Encoder class that wrap the C-style free-standing functions
+* Added a basic Github action workflow for managing building, packaging and releasing.
+
+### TODO
+
+* Add proper unit tests
+* Add an enum for the glTF helper functions (see common.pxi)
+* Improve build process: avoid building Draco every time the project is built (cache the build for each platform)
+* Improve build process: find a way to build and use Dracos tests when Draco is built (the build breaks unless the full library is built)
 
 ## Installation
 
@@ -38,13 +43,36 @@ pip install .
 pip install smtk_draco
 ```
 
+### For development
+
+Create a virtual environment (e.g. `python -m venv .venv`) and make sure
+to activate it.
+
+Install the prerequisites for an editable install:
+
+```
+pip install scikit-build-core scikit-build-core[pyproject] "cython>=3.0.8" 
+```
+
+Then, from the repository root execute the following command to create an editable install:
+```
+pip install --no-build-isolation -C build-dir=build --editable  .
+```
+
+NOTE: When changing the package source files you need to rebuild (i.e. rerun the install command above). This is because Cython needs to generate a new C++ source file for the 
+extension, which then needs to be rebuilt and linked with Draco. However, the Draco library will not have to be rebuilt, so the process is relatively quick. If the `build-dir` setting is omitted, the build system uses a temporary directory for each build which _will_ build Draco as well.
+
+## Build and release
+
+The repository uses a Github Action workflow to build, package and (conditionally) release the Python package by
+uploading it to the [Python Package Index](https://pypi.org).
+
+[cibuildwheel](https://github.com/pypa/cibuildwheel) is used to build wheels for Python 3.7-3.12 for several versions of Linux, Windows and macOS.
+
+Source distributions are built using `pipx`.
+
+The final release steps are only executed when a release is published. As a final test, the wheels and the source distribution are first uploaded to [Test PyPI](https://test.pypi.org) and then, if all goes well, the release is uploaded to PyPI.
+
 ## Usage
 
 For now, refer to the basic test script tests/test.py.
-
-
-# TODO
-
-* Add a Github Actions workflow for [cibuildwheel](https://github.com/pypa/cibuildwheel) to create wheels for more platforms and Python versions
-* Add proper unit tests
-* Add an enum for the glTF helper functions (see common.pxi)
