@@ -8,9 +8,9 @@ build-backend = "scikit_build_core.build"
 
 [project]
 name = "smtk_draco"
-version = "0.0.1"
+version = "1.0.0"
 description = "Python wrapper of Blenders Draco bridging library"
-requires-python = ">= 3.7"
+requires-python = ">= 3.8"
 authors = [
     {name = "barasimumatik"},
 ]

@@ -1,7 +1,7 @@
 #cython: language_level=3
 #distutils: language = c++
 
-__version__ = "0.0.1"
+__version__ = "1.0.0"
 
 # Include the implementation files to compile all the code into one extension
 include "common.pxi"

@@ -1,6 +1,6 @@
 # Python wrapper of Blenders Draco bridging library
 
-This repository contains a Cython-based wrapper for Python (>= 3.7) of the Blender bridging library for [Draco](https://github.com/google/draco) encoding/decoding (See [extern/draco](https://github.com/blender/blender/extern/draco) in the [Blender](https://github.com/blender/blender) Github mirror repository).
+This repository contains a Cython-based wrapper for Python (>= 3.8) of the Blender bridging library for [Draco](https://github.com/google/draco) encoding/decoding (See [extern/draco](https://github.com/blender/blender/extern/draco) in the [Blender](https://github.com/blender/blender) Github mirror repository).
 
 It was initially forked from [ux3d/blender_extern_draco](https://github.com/ux3d/blender_extern_draco) (commit [35e1595](https://github.com/ux3d/blender_extern_draco/commit/35e1595c0ab1fa627aeaeff0247890763f993865)) which is a repo containing a copy of the extern/draco folder and a git submodule with the Draco library (v1.5.2).
 
@@ -67,7 +67,7 @@ extension, which then needs to be rebuilt and linked with Draco. However, the Dr
 The repository uses a Github Action workflow to build, package and (conditionally) release the Python package by
 uploading it to the [Python Package Index](https://pypi.org).
 
-[cibuildwheel](https://github.com/pypa/cibuildwheel) is used to build wheels for Python 3.7-3.12 for several versions of Linux, Windows and macOS.
+[cibuildwheel](https://github.com/pypa/cibuildwheel) is used to build wheels for Python 3.8-3.14 for several versions of Linux, Windows and macOS.
 
 Source distributions are built using `pipx`.
 
